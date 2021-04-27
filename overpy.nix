@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 { lib, buildPythonPackage, fetchPypi, pytest, pytest-runner }:
 
 buildPythonPackage rec {

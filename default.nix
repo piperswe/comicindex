@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 { sources ? import ./nix/sources.nix }:
 let
   inherit (sources) nixpkgs gitignore;
