@@ -25,11 +25,11 @@ INDEX_TEMPLATE_STR = '''<!DOCTYPE html>
 <h1>comicindex</h1>
 <p>last update {{now}}</p>
 <ul>
-    <li><a href="{{path}}">{{path}}</a></li>
-    <li><a href="{{path}}.gz">{{path}}.gz</a></li>
-    <li><a href="{{path}}.bz2">{{path}}.bz2</a></li>
-    <li><a href="{{path}}.xz">{{path}}.xz</a></li>
-    <li><a href="{{path}}.br">{{path}}.br</a></li>
+    <li><a href="comic.index">comic.index</a></li>
+    <li><a href="comic.index.gz">comic.index.gz</a></li>
+    <li><a href="comic.index.bz2">comic.index.bz2</a></li>
+    <li><a href="comic.index.xz">comic.index.xz</a></li>
+    <li><a href="comic.index.br">comic.index.br</a></li>
 </ul>
 </body>
 </html>
@@ -92,7 +92,7 @@ def build(path):
     db.close()
     compress(os.path.join(path, 'comic.index'))
     with open(os.path.join(path, 'index.html'), 'w') as o:
-        o.write(INDEX_TEMPLATE.render(now=str(datetime.now()), path=path))
+        o.write(INDEX_TEMPLATE.render(now=str(datetime.now())))
     LOGGER.info('Successfully built an index of %d stores.', len(nodes))
 
 
