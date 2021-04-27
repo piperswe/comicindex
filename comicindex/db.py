@@ -50,6 +50,7 @@ create table stores
     phone_number  text,
     email_address text,
     website       text,
+    tags          text,
     license       integer
         references licenses
 );

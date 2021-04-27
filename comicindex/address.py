@@ -51,8 +51,10 @@ def get_line_1(address):
     return ' '.join(parts)
 
 
-def get_line_2(address):
+def get_line_2(node, address):
     parts = []
+    if 'addr:unit' in node.tags:
+        parts.append(node.tags['addr:unit'])
     return ' '.join(parts)
 
 
@@ -88,7 +90,7 @@ def insert_address(node, cur):
     if 'address' in o:
         addr = o['address']
         line_1 = get_line_1(addr)
-        line_2 = get_line_2(addr)
+        line_2 = get_line_2(node, addr)
         if 'city' in addr:
             city = addr['city']
         elif 'town' in addr:
