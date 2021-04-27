@@ -16,6 +16,7 @@ python3Packages.buildPythonPackage {
     requests
     brotli
     zopfli
+    jinja2
   ];
 
   nativeBuildInputs = with python3Packages; [ pylint autopep8 ];

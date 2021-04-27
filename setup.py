@@ -12,6 +12,7 @@ setup(
         'requests',
         'brotli',
         'zopfli',
+        'jinja2',
     ],
     scripts=['bin/comicindex']
 )

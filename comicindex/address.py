@@ -8,6 +8,18 @@ NOMINATIM_BATCH_SIZE = 50
 NOMINATIM_PER_SECOND = 1
 
 
+def node_id(node):
+    from overpy import Node, Way, Relation
+    if isinstance(node, Node):
+        return 'N{}'.format(node.id)
+    elif isinstance(node, Way):
+        return 'W{}'.format(node.id)
+    elif isinstance(node, Relation):
+        return 'R{}'.format(node.id)
+    else:
+        return None
+
+
 def fetch_addresses(nodes):
     from requests import get
     from time import sleep
@@ -15,7 +27,7 @@ def fetch_addresses(nodes):
     for i in range(0, len(nodes), NOMINATIM_BATCH_SIZE):
         batch = nodes[i:i + NOMINATIM_BATCH_SIZE]
         LOGGER.debug('Fetching addresses %d through %d...')
-        ids = ['N{}'.format(node.id) for node in batch]
+        ids = [node_id(node) for node in batch]
         r = get('https://nominatim.openstreetmap.org/lookup',
                 params={
                     'osm_ids': ','.join(ids),

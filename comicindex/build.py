@@ -3,17 +3,44 @@
 
 import argparse
 import logging
+from jinja2 import Template
 
 LOGGER = logging.getLogger(__name__)
 
 QUERY = '''
-    node["shop"="books"]["books"="comic"];
+    (
+        node["shop"="books"]["books"="comic"];
+        way["shop"="books"]["books"="comic"];
+        relation["shop"="books"]["books"="comic"];
+    );
     out;
 '''
 
+INDEX_TEMPLATE_STR = '''<!DOCTYPE html>
+<html>
+<head>
+    <title>comicindex</title>
+</head>
+<body>
+<h1>comicindex</h1>
+<p>last update {{now}}</p>
+<ul>
+    <li><a href="{{path}}">{{path}}</a></li>
+    <li><a href="{{path}}.gz">{{path}}.gz</a></li>
+    <li><a href="{{path}}.bz2">{{path}}.bz2</a></li>
+    <li><a href="{{path}}.xz">{{path}}.xz</a></li>
+    <li><a href="{{path}}.br">{{path}}.br</a></li>
+</ul>
+</body>
+</html>
+
+'''
+
+INDEX_TEMPLATE = Template(INDEX_TEMPLATE_STR)
+
 
 def init_parser(p):
-    p.add_argument('-o', '--out', dest='out', default='comic.index', help='Output file')
+    p.add_argument('-o', '--out', dest='out', default='docs', help='Output file')
 
 
 def compress(path):
@@ -39,7 +66,9 @@ def compress(path):
 
 
 def build(path):
+    import os
     from overpy import Overpass
+    from datetime import datetime
     from comicindex.address import fetch_addresses
     from comicindex.store import insert_store
     from comicindex.db import get_new_db
@@ -48,11 +77,12 @@ def build(path):
 
     LOGGER.info('Querying OpenStreetMap...')
     result = api.query(QUERY)
-    nodes = result.nodes
+    nodes = result.nodes + result.ways + result.relations
     LOGGER.info('Fetching addresses...')
     fetch_addresses(nodes)
     LOGGER.info('Saving to index database...')
-    db = get_new_db(path)
+    os.makedirs(path, exist_ok=True)
+    db = get_new_db(os.path.join(path, 'comic.index'))
     cur = db.cursor()
     for n in nodes:
         insert_store(n, cur)
@@ -60,7 +90,9 @@ def build(path):
     db.execute('VACUUM')
     db.execute('PRAGMA OPTIMIZE')
     db.close()
-    compress(path)
+    compress(os.path.join(path, 'comic.index'))
+    with open(os.path.join(path, 'index.html'), 'w') as o:
+        o.write(INDEX_TEMPLATE.render(now=str(datetime.now()), path=path))
     LOGGER.info('Successfully built an index of %d stores.', len(nodes))
 
 

@@ -1,4 +1,5 @@
-comic.index*
+/comic.index*
+/index.html
 result
 *_pb2.py
 venv
