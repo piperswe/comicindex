@@ -1,0 +1,5 @@
+{
+    "nixEnvSelector.nixFile": "${workspaceRoot}/default.nix",
+    "editor.tabSize": 4,
+    "python.pythonPath": "/nix/store/d44wd6n98f93hjr6q1d1phhh1hw7a17d-python3-3.8.8/bin/python3"
+}
