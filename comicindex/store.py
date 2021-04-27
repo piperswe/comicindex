@@ -7,11 +7,12 @@ LOGGER = logging.getLogger(__name__)
 
 def insert_store(node, cur):
     import json
-    from comicindex.address import insert_address
+    from comicindex.address import insert_address, node_id
 
     LOGGER.debug('Inserting node ID %d', node.id)
 
     tags = node.tags
+    osm_id = node_id(node)
     name = None
     phone_number = None
     email_address = None
@@ -42,7 +43,7 @@ def insert_store(node, cur):
 
     cur.execute('''
         INSERT INTO stores
-            (name, phone_number, email_address, website, license, tags, address)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''', (name, phone_number, email_address, website, lic, tag_json, address))
+            (osm_id, name, phone_number, email_address, website, license, tags, address)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (osm_id, name, phone_number, email_address, website, lic, tag_json, address))
     return cur.lastrowid

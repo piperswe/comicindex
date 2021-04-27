@@ -43,7 +43,7 @@ create table stores
     id            integer not null
         constraint stores_pk
             primary key autoincrement,
-    osm_id        integer,
+    osm_id        text,
     name          text,
     address       integer
         references addresses,

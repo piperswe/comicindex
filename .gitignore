@@ -1,5 +1,7 @@
 /comic.index*
 /index.html
+*-shm
+*-wal
 result
 *_pb2.py
 venv
