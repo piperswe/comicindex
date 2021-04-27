@@ -4,7 +4,7 @@ let
   inherit (sources) nixpkgs gitignore;
   pkgs = import nixpkgs { };
   gitignoreSource = (import gitignore { }).gitignoreSource;
-  inherit (pkgs) python3 python3Packages;
+  inherit (pkgs) python3 python3Packages nodePackages yarn;
 in
 python3Packages.buildPythonPackage {
   name = "comicindex";
@@ -19,7 +19,11 @@ python3Packages.buildPythonPackage {
     jinja2
   ];
 
-  nativeBuildInputs = with python3Packages; [ pylint autopep8 ];
+  nativeBuildInputs = (with python3Packages; [ pylint autopep8 ])
+    ++ [
+    yarn
+    nodePackages."@vue/cli"
+  ];
 
   doCheck = false;
 }
