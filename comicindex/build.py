@@ -101,7 +101,7 @@ def build(path):
     db.close()
     compress(os.path.join(path, 'comic.index'))
     with open(os.path.join(path, 'index.html'), 'w') as o:
-        o.write(INDEX_TEMPLATE.render(now=str(datetime.now()), count=len(nodes)))
+        o.write(INDEX_TEMPLATE.render(now=datetime.utcnow().isoformat(), count=len(nodes)))
     LOGGER.info('Successfully built an index of %d stores.', len(nodes))
 
 
